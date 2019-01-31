@@ -20,7 +20,7 @@ public class Car_Managment {
 	}
 	
 	//methods
-	public boolean addClient(Car car) {
+	public boolean addCar(Car car) {
 		boolean added = false;
 		Query query = session.createQuery("from Car where licensePlate = :licensePlate");
 		query.setParameter("licensePlate", car.getLicensePlate());
@@ -38,7 +38,7 @@ public class Car_Managment {
 		return added;
 	}
 
-	public boolean removeClient(Car car) {
+	public boolean removeCar(Car car) {
 		boolean removed = false;
 		Query query = session.createQuery("from Car where licensePlate = :licensePlate");
 		query.setParameter("licensePlate", car.getLicensePlate());
@@ -56,7 +56,7 @@ public class Car_Managment {
 		return removed;
 	}
 	
-	public boolean modifyClient(Car car) {
+	public boolean modifyCar(Car car) {
 		boolean updated = false;
 		Query query = session.createQuery("from Car where licensePlate = :licensePlate");
 		query.setParameter("licensePlate", car.getLicensePlate());
