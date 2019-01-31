@@ -43,10 +43,11 @@ public class Client_Managment {
 		Query query = session.createQuery("from Client where dni = :dni");
 		query.setParameter("dni", client.getDni());
 		ArrayList<Client> list = (ArrayList<Client>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.remove(client);
+				Client removedClient = (Client)session.get(Client.class, client.getDni());
+				session.remove(removedClient);
 				session.getTransaction().commit();
 				removed = true;
 			} catch (HibernateException e) {
@@ -56,15 +57,26 @@ public class Client_Managment {
 		return removed;
 	}
 	
-	public boolean modifyClient(Client client) {
+	public boolean modifyClient(Client client, int option) {
 		boolean updated = false;
 		Query query = session.createQuery("from Client where dni = :dni");
 		query.setParameter("dni", client.getDni());
 		ArrayList<Client> list = (ArrayList<Client>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.update(client);
+				Client updatedClient = (Client)session.get(Client.class, client.getDni());
+				if (option == 1) {
+					updatedClient.setAddress(client.getAddress());
+				}
+				if (option == 2 ) {
+					updatedClient.setPhone(client.getPhone());
+				}
+				if (option == 3) {
+					updatedClient.setAddress(client.getAddress());
+					updatedClient.setPhone(client.getPhone());
+				}
+				session.update(updatedClient);
 				session.getTransaction().commit();
 				updated = true;
 			} catch (HibernateException e) {

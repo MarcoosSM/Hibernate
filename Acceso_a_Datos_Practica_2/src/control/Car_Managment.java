@@ -43,10 +43,11 @@ public class Car_Managment {
 		Query query = session.createQuery("from Car where licensePlate = :licensePlate");
 		query.setParameter("licensePlate", car.getLicensePlate());
 		ArrayList<Car> list = (ArrayList<Car>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.remove(car);
+				Car removedCar = (Car)session.get(Car.class, car.getLicensePlate());
+				session.remove(removedCar);
 				session.getTransaction().commit();
 				removed = true;
 			} catch (HibernateException e) {
@@ -61,10 +62,14 @@ public class Car_Managment {
 		Query query = session.createQuery("from Car where licensePlate = :licensePlate");
 		query.setParameter("licensePlate", car.getLicensePlate());
 		ArrayList<Car> list = (ArrayList<Car>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.update(car);
+				Car updatedCar = (Car)session.get(Car.class, car.getLicensePlate());
+				updatedCar.setBrand(car.getBrand());
+				updatedCar.setColor(car.getColor());
+				updatedCar.setModel(car.getModel());
+				session.update(updatedCar);
 				session.getTransaction().commit();
 				updated = true;
 			} catch (HibernateException e) {

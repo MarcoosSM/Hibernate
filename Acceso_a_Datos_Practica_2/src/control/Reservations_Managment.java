@@ -43,10 +43,11 @@ public class Reservations_Managment {
 		Query query = session.createQuery("from Reservation where idReservation = :idReservation");
 		query.setParameter("idReservation", reservation.getIdReservation());
 		ArrayList<Reservation> list = (ArrayList<Reservation>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.remove(reservation);
+				Reservation removedReservation = (Reservation)session.get(Reservation.class, reservation.getIdReservation());
+				session.remove(removedReservation);
 				session.getTransaction().commit();
 				removed = true;
 			} catch (HibernateException e) {
@@ -61,10 +62,15 @@ public class Reservations_Managment {
 		Query query = session.createQuery("from Reservation where idReservation = :idReservation");
 		query.setParameter("idReservation", reservation.getIdReservation());
 		ArrayList<Reservation> list = (ArrayList<Reservation>) query.list();
-		if (list.isEmpty()) {
+		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				session.update(reservation);
+				Reservation updatedReservation = (Reservation)session.get(Reservation.class, reservation.getIdReservation());
+				updatedReservation.setStartDate(reservation.getStartDate());
+				updatedReservation.setEndDate(reservation.getEndDate());
+				updatedReservation.setCars(reservation.getCars());
+				updatedReservation.setClient(reservation.getClient());
+				session.update(updatedReservation);
 				session.getTransaction().commit();
 				updated = true;
 			} catch (HibernateException e) {
