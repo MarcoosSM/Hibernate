@@ -2,6 +2,8 @@ package control;
 
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -57,7 +59,7 @@ public class Client_Managment {
 		return removed;
 	}
 	
-	public boolean modifyClient(Client client, int option) {
+	public boolean modifyClient(Client client) {
 		boolean updated = false;
 		Query query = session.createQuery("from Client where dni = :dni");
 		query.setParameter("dni", client.getDni());
@@ -66,16 +68,8 @@ public class Client_Managment {
 			try {
 				session.beginTransaction();
 				Client updatedClient = (Client)session.get(Client.class, client.getDni());
-				if (option == 1) {
-					updatedClient.setAddress(client.getAddress());
-				}
-				if (option == 2 ) {
-					updatedClient.setPhone(client.getPhone());
-				}
-				if (option == 3) {
-					updatedClient.setAddress(client.getAddress());
-					updatedClient.setPhone(client.getPhone());
-				}
+				updatedClient.setAddress(client.getAddress());
+				updatedClient.setPhone(client.getPhone());
 				session.update(updatedClient);
 				session.getTransaction().commit();
 				updated = true;
@@ -84,5 +78,50 @@ public class Client_Managment {
 			}	
 		}
 		return updated;
+	}
+	
+	public DefaultTableModel clientTable() {
+		DefaultTableModel model = null;
+		Query query = session.createQuery("from Client");
+		ArrayList<Client> result = (ArrayList<Client>) query.list();
+		model = new DefaultTableModel();
+		model.addColumn("DNI");
+		model.addColumn("Name");
+		model.addColumn("Address");
+		model.addColumn("Phone");
+		if (!result.isEmpty()) {	
+			for(int x=0; x<result.size(); ++x) {
+				Object[] row = new Object[4];
+				row[0] = result.get(x).getDni();
+				row[1] = result.get(x).getName();
+				row[2] = result.get(x).getAddress();
+				row[3] = result.get(x).getPhone();
+				model.addRow(row);
+			}
+		}	
+		return model;
+	}
+	
+	public DefaultTableModel searchByDniTable(String dni) {
+		DefaultTableModel model = null;
+		Query query = session.createQuery("from Client where dni = :dni");
+		query.setParameter("dni", dni);
+		ArrayList<Client> result = (ArrayList<Client>) query.list();
+		model = new DefaultTableModel();
+		model.addColumn("DNI");
+		model.addColumn("Name");
+		model.addColumn("Address");
+		model.addColumn("Phone");
+		if (!result.isEmpty()) {	
+			for(int x=0; x<result.size(); ++x) {
+				Object[] row = new Object[4];
+				row[0] = result.get(x).getDni();
+				row[1] = result.get(x).getName();
+				row[2] = result.get(x).getAddress();
+				row[3] = result.get(x).getPhone();
+				model.addRow(row);
+			}
+		}	
+		return model;
 	}
 }

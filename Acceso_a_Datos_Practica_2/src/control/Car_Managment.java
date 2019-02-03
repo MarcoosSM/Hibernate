@@ -2,6 +2,9 @@ package control;
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -77,5 +80,69 @@ public class Car_Managment {
 			}	
 		}
 		return updated;
+	}
+	
+	public DefaultTableModel carTable() {
+		DefaultTableModel model = null;
+		Query query = session.createQuery("from Car");
+		ArrayList<Car> result = (ArrayList<Car>) query.list();
+		model = new DefaultTableModel();
+		model.addColumn("License Plate");
+		model.addColumn("Model");
+		model.addColumn("Color");
+		model.addColumn("Brand");
+		if (!result.isEmpty()) {	
+			for(int x=0; x<result.size(); ++x) {
+				Object[] row = new Object[4];
+				row[0] = result.get(x).getLicensePlate();
+				row[1] = result.get(x).getModel();
+				row[2] = result.get(x).getColor();
+				row[3] = result.get(x).getBrand();
+				model.addRow(row);
+			}
+		}	
+		return model;
+	}
+	
+	public DefaultTableModel searchByBrandTable(String brand) {
+		DefaultTableModel model = null;
+		Query query = session.createQuery("from Car where brand = :brand");
+		query.setParameter("brand", brand);
+		ArrayList<Car> result = (ArrayList<Car>) query.list();
+		model = new DefaultTableModel();
+		model.addColumn("License Plate");
+		model.addColumn("Model");
+		model.addColumn("Color");
+		model.addColumn("Brand");
+		if (!result.isEmpty()) {	
+			for(int x=0; x<result.size(); ++x) {
+				Object[] row = new Object[4];
+				row[0] = result.get(x).getLicensePlate();
+				row[1] = result.get(x).getModel();
+				row[2] = result.get(x).getColor();
+				row[3] = result.get(x).getBrand();
+				model.addRow(row);
+			}
+		}	
+		return model;
+	}
+	
+	public DefaultComboBoxModel<String> carBrandComboBox() {
+		DefaultComboBoxModel<String> model = null; 
+		Query query = session.createQuery("from Car");
+		ArrayList<Car> result = (ArrayList<Car>) query.list();
+		model = new DefaultComboBoxModel<String>();
+		ArrayList<String> brandList = new ArrayList<String>();
+		if (!result.isEmpty()) {
+			for(int x=0; x<result.size(); ++x) {
+				if (!brandList.contains(result.get(x).getBrand())) {
+					brandList.add(result.get(x).getBrand());
+				}
+			}	
+			for(int y=0; y<brandList.size(); ++y) {
+				model.addElement(brandList.get(y));
+			}	
+		}
+		return model;
 	}
 }
