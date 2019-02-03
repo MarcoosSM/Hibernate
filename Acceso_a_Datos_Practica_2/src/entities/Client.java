@@ -22,7 +22,7 @@ public class Client implements java.io.Serializable {
 	public Client(String dni) {
 		this.dni = dni;
 	}
-	
+
 	public Client(String dni, String name, String address, String phone, Set reservations) {
 		this.dni = dni;
 		this.name = name;

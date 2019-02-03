@@ -22,7 +22,7 @@ public class Car implements java.io.Serializable {
 	public Car(String licensePlate) {
 		this.licensePlate = licensePlate;
 	}
-	
+
 	public Car(String licensePlate, String model, String color, String brand, Set reservations) {
 		this.licensePlate = licensePlate;
 		this.model = model;

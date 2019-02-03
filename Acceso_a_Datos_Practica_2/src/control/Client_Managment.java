@@ -13,15 +13,15 @@ import entities.Client;
 @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 public class Client_Managment {
 
-	//attributes
+	// attributes
 	Session session;
-	
-	//builder
+
+	// builder
 	public Client_Managment(Session session) {
 		this.session = session;
 	}
-	
-	//methods
+
+	// methods
 	public boolean addClient(Client client) {
 		boolean added = false;
 		Query query = session.createQuery("from Client where dni = :dni");
@@ -35,7 +35,7 @@ public class Client_Managment {
 				added = true;
 			} catch (HibernateException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 		return added;
 	}
@@ -48,17 +48,17 @@ public class Client_Managment {
 		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				Client removedClient = (Client)session.get(Client.class, client.getDni());
+				Client removedClient = (Client) session.get(Client.class, client.getDni());
 				session.remove(removedClient);
 				session.getTransaction().commit();
 				removed = true;
 			} catch (HibernateException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 		return removed;
 	}
-	
+
 	public boolean modifyClient(Client client) {
 		boolean updated = false;
 		Query query = session.createQuery("from Client where dni = :dni");
@@ -67,7 +67,7 @@ public class Client_Managment {
 		if (!list.isEmpty()) {
 			try {
 				session.beginTransaction();
-				Client updatedClient = (Client)session.get(Client.class, client.getDni());
+				Client updatedClient = (Client) session.get(Client.class, client.getDni());
 				updatedClient.setAddress(client.getAddress());
 				updatedClient.setPhone(client.getPhone());
 				session.update(updatedClient);
@@ -75,11 +75,11 @@ public class Client_Managment {
 				updated = true;
 			} catch (HibernateException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 		return updated;
 	}
-	
+
 	public DefaultTableModel clientTable() {
 		DefaultTableModel model = null;
 		Query query = session.createQuery("from Client");
@@ -89,8 +89,8 @@ public class Client_Managment {
 		model.addColumn("Name");
 		model.addColumn("Address");
 		model.addColumn("Phone");
-		if (!result.isEmpty()) {	
-			for(int x=0; x<result.size(); ++x) {
+		if (!result.isEmpty()) {
+			for (int x = 0; x < result.size(); ++x) {
 				Object[] row = new Object[4];
 				row[0] = result.get(x).getDni();
 				row[1] = result.get(x).getName();
@@ -98,10 +98,10 @@ public class Client_Managment {
 				row[3] = result.get(x).getPhone();
 				model.addRow(row);
 			}
-		}	
+		}
 		return model;
 	}
-	
+
 	public DefaultTableModel searchByDniTable(String dni) {
 		DefaultTableModel model = null;
 		Query query = session.createQuery("from Client where dni = :dni");
@@ -112,8 +112,8 @@ public class Client_Managment {
 		model.addColumn("Name");
 		model.addColumn("Address");
 		model.addColumn("Phone");
-		if (!result.isEmpty()) {	
-			for(int x=0; x<result.size(); ++x) {
+		if (!result.isEmpty()) {
+			for (int x = 0; x < result.size(); ++x) {
 				Object[] row = new Object[4];
 				row[0] = result.get(x).getDni();
 				row[1] = result.get(x).getName();
@@ -121,7 +121,7 @@ public class Client_Managment {
 				row[3] = result.get(x).getPhone();
 				model.addRow(row);
 			}
-		}	
+		}
 		return model;
 	}
 }
