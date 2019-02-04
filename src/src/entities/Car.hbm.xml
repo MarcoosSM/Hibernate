@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21 ene. 2019 19:42:05 by Hibernate Tools 5.2.11.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="mydb" dynamic-insert="false" dynamic-update="false" mutable="true" name="entities.Car" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="car">
+        <id name="licensePlate" type="string">
+            <column length="10" name="license_plate"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="model" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="model"/>
+        </property>
+        <property generated="never" lazy="false" name="color" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="color"/>
+        </property>
+        <property generated="never" lazy="false" name="brand" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="brand"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="reservations" optimistic-lock="true" sort="unsorted" table="reserved_cars">
+            <key on-delete="noaction">
+                <column length="10" name="license_plate" not-null="true"/>
+            </key>
+            <many-to-many embed-xml="true" entity-name="entities.Reservation" not-found="exception" unique="false">
+                <column name="id_reservation" not-null="true"/>
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
